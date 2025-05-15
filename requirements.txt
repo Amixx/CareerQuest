@@ -1,0 +1,7 @@
+requests
+beautifulsoup4
+python-dotenv
+SQLAlchemy
+selenium
+webdriver-manager
+tabulate
