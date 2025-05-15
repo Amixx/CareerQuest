@@ -32,7 +32,7 @@ async function initApp() {
   } catch (error) {
     console.error("Error loading jobs data:", error);
     // Display error message to user
-    alert("Unable to load jobs data. Please try again later.");
+    alert("Nevarēja ielādēt darbu datus.");
   }
 }
 
@@ -108,8 +108,8 @@ function displayCurrentQuestion() {
             <button class="btn btn-primary" id="next-btn">
                 ${
                   currentQuestionIndex === questions.length - 1
-                    ? "See Results"
-                    : "Next"
+                    ? "Skatīt rezultātus"
+                    : "Nākamais"
                 }
             </button>
         </div>
@@ -241,8 +241,7 @@ function showResults() {
   let jobMatchesHTML = "";
 
   if (matchedJobs.length === 0) {
-    jobMatchesHTML =
-      "<p>No matching jobs found. Try adjusting your preferences.</p>";
+    jobMatchesHTML = "<p>Netika atrasts neviens piemērots darbs.</p>";
   } else {
     matchedJobs.forEach((job) => {
       // Format salary if available
@@ -285,7 +284,7 @@ function showResults() {
         <div class="job-match">
             <div class="match-header">
                 <h3>${job.title}</h3>
-                <div class="match-score">${job.matchScore}% Match</div>
+                <div class="match-score">${job.matchScore}% sakritiība</div>
             </div>
             <div class="match-company">${job.company}</div>
             <div class="match-location">${job.location}</div>
@@ -299,10 +298,10 @@ function showResults() {
             <div class="match-details">
                 <button class="btn btn-outline job-details-btn" data-jobid="${
                   job.id
-                }">View Details</button>
+                }">Skatīt aprakstu</button>
                 ${
                   job.url
-                    ? `<a href="${job.url}" target="_blank" class="btn btn-primary">Apply Now</a>`
+                    ? `<a href="${job.url}" target="_blank" class="btn btn-primary">Pieteikties</a>`
                     : ""
                 }
             </div>
@@ -312,23 +311,27 @@ function showResults() {
             }" style="display: none;">
                 ${
                   job.description
-                    ? `<h4>Job Description</h4><p>${job.description}</p>`
+                    ? `<h4>Darba apraksts</h4><p>${job.description}</p>`
                     : ""
                 }
                 ${
                   job.requirements
-                    ? `<h4>Requirements</h4><p>${job.requirements}</p>`
+                    ? `<h4>Prasības</h4><p>${job.requirements}</p>`
                     : ""
                 }
                 ${
                   job.responsibilities
-                    ? `<h4>Responsibilities</h4><p>${job.responsibilities}</p>`
+                    ? `<h4>Pienākumi</h4><p>${job.responsibilities}</p>`
                     : ""
                 }
-                ${job.benefits ? `<h4>Benefits</h4><p>${job.benefits}</p>` : ""}
+                ${
+                  job.benefits
+                    ? `<h4>Priekšrocības</h4><p>${job.benefits}</p>`
+                    : ""
+                }
                 ${
                   job.deadline
-                    ? `<p><strong>Application Deadline:</strong> ${job.deadline}</p>`
+                    ? `<p><strong>Pieteikšanās termiņš:</strong> ${job.deadline}</p>`
                     : ""
                 }
             </div>
@@ -348,10 +351,10 @@ function showResults() {
 
       if (detailsSection.style.display === "none") {
         detailsSection.style.display = "block";
-        this.textContent = "Hide Details";
+        this.textContent = "Paslēpt aprakstu";
       } else {
         detailsSection.style.display = "none";
-        this.textContent = "View Details";
+        this.textContent = "Parādīt aprakstu";
       }
     });
   });
