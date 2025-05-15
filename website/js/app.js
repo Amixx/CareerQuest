@@ -179,26 +179,46 @@ function saveCurrentAnswer() {
 
 // Calculate job matches based on user answers
 function calculateMatches() {
+  // Define weights for different factors (can be adjusted)
+  const weights = {
+    teamwork_preference: 0.8,
+    learning_opportunity: 1.0,
+    experience_required: 1.0,
+    work_environment: 1.0,
+    stress_level: 0.8,
+    creativity_required: 0.8,
+    company_size: 0.6,
+    remote_preference: 0.9,
+    career_growth: 0.8,
+    project_type: 0.7,
+  };
+
   matchedJobs = jobs.map((job) => {
-    let matchScore = 0;
-    let totalFactors = 0;
+    let weightedScore = 0;
+    let totalWeight = 0;
 
     for (const field in answers) {
       if (job[field] !== undefined) {
-        // Calculate how close the job is to the user's preference
+        // Calculate match percentage (0-100)
         // Lower difference means better match
-        const difference = Math.abs(job[field] - answers[field]);
+        const userValue = answers[field];
+        const jobValue = job[field];
         const maxPossibleDifference = 10; // Scale is 0-10
+
+        // Calculate how well they match (100% = perfect match, 0% = completely opposite)
+        const difference = Math.abs(jobValue - userValue);
         const factorScore = 100 - difference * 10; // Convert to percentage
 
-        matchScore += factorScore;
-        totalFactors++;
+        // Apply weight for this factor
+        const weight = weights[field] || 1.0;
+        weightedScore += factorScore * weight;
+        totalWeight += weight;
       }
     }
 
-    // Calculate average match score if we have factors to consider
+    // Calculate weighted average match score
     const finalScore =
-      totalFactors > 0 ? Math.round(matchScore / totalFactors) : 0;
+      totalWeight > 0 ? Math.round(weightedScore / totalWeight) : 0;
 
     return {
       ...job,
@@ -209,8 +229,8 @@ function calculateMatches() {
   // Sort jobs by match score (highest first)
   matchedJobs.sort((a, b) => b.matchScore - a.matchScore);
 
-  // Only keep the top matches (e.g., top 5)
-  matchedJobs = matchedJobs.slice(0, 5);
+  // Only keep the top matches (e.g., top 10)
+  matchedJobs = matchedJobs.slice(0, 10);
 }
 
 // Show results screen with matched jobs
@@ -225,54 +245,95 @@ function showResults() {
       "<p>No matching jobs found. Try adjusting your preferences.</p>";
   } else {
     matchedJobs.forEach((job) => {
+      // Format salary if available
+      let salaryText = "";
+      if (job.salary_min > 0 || job.salary_max > 0) {
+        if (job.salary_min > 0 && job.salary_max > 0) {
+          salaryText = `${job.salary_min} - ${job.salary_max} €`;
+        } else if (job.salary_min > 0) {
+          salaryText = `No mazāk kā ${job.salary_min} €`;
+        } else if (job.salary_max > 0) {
+          salaryText = `Līdz ${job.salary_max} €`;
+        }
+      }
+
+      // Create match explanation based on answers
+      const matchFactors = [];
+      if (Math.abs(job.work_environment - answers.work_environment) <= 2) {
+        matchFactors.push("Darba vide");
+      }
+      if (
+        Math.abs(job.experience_required - answers.experience_required) <= 2
+      ) {
+        matchFactors.push("Pieredzes prasības");
+      }
+      if (answers.creativity_required > 7 && job.creativity_required >= 7) {
+        matchFactors.push("Radoša darba iespējas");
+      }
+      if (answers.career_growth > 7 && job.career_growth >= 7) {
+        matchFactors.push("Karjeras izaugsme");
+      }
+
+      const matchReason =
+        matchFactors.length > 0
+          ? `<div class="match-reason">Laba sakritība: ${matchFactors.join(
+              ", "
+            )}</div>`
+          : "";
+
       jobMatchesHTML += `
-                <div class="job-match">
-                    <div class="match-header">
-                        <h3>${job.title}</h3>
-                        <div class="match-score">${job.matchScore}% Match</div>
-                    </div>
-                    <div class="match-company">${job.company}</div>
-                    <div class="match-location">${job.location}</div>
-                    ${
-                      job.salary
-                        ? `<div class="match-salary">Salary: ${job.salary}</div>`
-                        : ""
-                    }
-                    
-                    <div class="match-details">
-                        <button class="btn btn-outline job-details-btn" data-jobid="${
-                          job.id
-                        }">View Details</button>
-                        ${
-                          job.url
-                            ? `<a href="${job.url}" target="_blank" class="btn btn-primary">Apply Now</a>`
-                            : ""
-                        }
-                    </div>
-                    
-                    <div class="job-full-details" id="details-${
-                      job.id
-                    }" style="display: none;">
-                        ${
-                          job.description
-                            ? `
-                            <h4>Job Description</h4>
-                            <p>${job.description}</p>
-                        `
-                            : ""
-                        }
-                        
-                        ${
-                          job.requirements
-                            ? `
-                            <h4>Requirements</h4>
-                            <p>${job.requirements}</p>
-                        `
-                            : ""
-                        }
-                    </div>
-                </div>
-            `;
+        <div class="job-match">
+            <div class="match-header">
+                <h3>${job.title}</h3>
+                <div class="match-score">${job.matchScore}% Match</div>
+            </div>
+            <div class="match-company">${job.company}</div>
+            <div class="match-location">${job.location}</div>
+            ${
+              salaryText
+                ? `<div class="match-salary">Alga: ${salaryText}</div>`
+                : ""
+            }
+            ${matchReason}
+            
+            <div class="match-details">
+                <button class="btn btn-outline job-details-btn" data-jobid="${
+                  job.id
+                }">View Details</button>
+                ${
+                  job.url
+                    ? `<a href="${job.url}" target="_blank" class="btn btn-primary">Apply Now</a>`
+                    : ""
+                }
+            </div>
+            
+            <div class="job-full-details" id="details-${
+              job.id
+            }" style="display: none;">
+                ${
+                  job.description
+                    ? `<h4>Job Description</h4><p>${job.description}</p>`
+                    : ""
+                }
+                ${
+                  job.requirements
+                    ? `<h4>Requirements</h4><p>${job.requirements}</p>`
+                    : ""
+                }
+                ${
+                  job.responsibilities
+                    ? `<h4>Responsibilities</h4><p>${job.responsibilities}</p>`
+                    : ""
+                }
+                ${job.benefits ? `<h4>Benefits</h4><p>${job.benefits}</p>` : ""}
+                ${
+                  job.deadline
+                    ? `<p><strong>Application Deadline:</strong> ${job.deadline}</p>`
+                    : ""
+                }
+            </div>
+        </div>
+      `;
     });
   }
 

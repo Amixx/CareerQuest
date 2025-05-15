@@ -25,20 +25,28 @@ def export_jobs_to_json(db_path, output_file):
         cursor.execute("""
             SELECT id, title, company, location, salary_min, salary_max, 
                    description, requirements, responsibilities, benefits, 
-                   deadline, team_work_likelihood, url, scraped_at
+                   deadline, teamwork_preference, work_environment, learning_opportunity,
+                   company_size, remote_preference, career_growth, project_type,
+                   experience_required, stress_level, creativity_required,
+                   url, scraped_at
             FROM job_listings
         """)
         
         jobs = [dict(row) for row in cursor.fetchall()]
         
-        # Add placeholder fields for matching algorithm
+        # Process jobs data for frontend use
         for job in jobs:
-            # These are placeholder fields that will be used for matching
-            job['work_environment'] = float(job['team_work_likelihood']) * 10  # Scale 0-10
-            job['tech_level'] = 5  # Placeholder, 0-10 scale
-            job['experience_required'] = 3  # Placeholder, 0-10 scale
-            job['stress_level'] = 5  # Placeholder, 0-10 scale
-            job['creativity_required'] = 4  # Placeholder, 0-10 scale
+            # Convert values from 0-1 scale to 0-10 scale
+            job['teamwork_preference'] = round(float(job.get('teamwork_preference', 0.5)) * 10)
+            job['work_environment'] = round(float(job.get('work_environment', 0.5)) * 10)
+            job['learning_opportunity'] = round(float(job.get('learning_opportunity', 0.5)) * 10)
+            job['company_size'] = round(float(job.get('company_size', 0.4)) * 10)
+            job['remote_preference'] = round(float(job.get('remote_preference', 0.3)) * 10)
+            job['career_growth'] = round(float(job.get('career_growth', 0.5)) * 10)
+            job['project_type'] = round(float(job.get('project_type', 0.5)) * 10)
+            job['experience_required'] = round(float(job.get('experience_required', 0.5)) * 10)
+            job['stress_level'] = round(float(job.get('stress_level', 0.5)) * 10)
+            job['creativity_required'] = round(float(job.get('creativity_required', 0.5)) * 10)
         
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(jobs, f, ensure_ascii=False, default=json_serial, indent=2)
