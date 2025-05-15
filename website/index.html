@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Matcher</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/questions.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Job Matcher</h1>
+            <p>Find the perfect job based on your preferences</p>
+        </header>
+        
+        <main id="app">
+            <!-- Content will be loaded dynamically -->
+            <div id="welcome-screen" class="screen active">
+                <h2>Welcome to Job Matcher</h2>
+                <p>Answer 10 simple questions to find your ideal job match from our database.</p>
+                <button id="start-btn" class="btn btn-primary">Start Questionnaire</button>
+            </div>
+            
+            <div id="question-screen" class="screen">
+                <div class="progress-bar">
+                    <div id="progress" style="width: 0%"></div>
+                </div>
+                <div id="question-container">
+                    <!-- Questions will be inserted here -->
+                </div>
+            </div>
+            
+            <div id="results-screen" class="screen">
+                <h2>Your Job Matches</h2>
+                <p>Based on your answers, here are your top job matches:</p>
+                <div id="job-matches">
+                    <!-- Job matches will be inserted here -->
+                </div>
+                <button id="start-over-btn" class="btn btn-secondary">Start Over</button>
+            </div>
+        </main>
+        
+        <footer>
+            <p>&copy; 2025 Job Matcher | Data from CV.lv</p>
+        </footer>
+    </div>
+
+    <script src="js/questions.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
