@@ -72,7 +72,7 @@ const questions = [
       { value: 3, text: "Mazā uzņēmumā (līdz 20 darbiniekiem)" },
       { value: 5, text: "Vidēja izmēra uzņēmumā (20-100 darbinieki)" },
       { value: 7, text: "Lielā (100-500 darbinieki)" },
-      { value: 10, text: "Ļoti lielsā (500+ darbinieki)" },
+      { value: 10, text: "Ļoti lielā (500+ darbinieki)" },
     ],
     field: "company_size",
   },
