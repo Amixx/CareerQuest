@@ -64,7 +64,7 @@ def export_jobs_to_json(db_path, output_file):
 def main():
     parser = argparse.ArgumentParser(description='Export job listings to JSON')
     parser.add_argument('--db', default='job_listings.db', help='Path to SQLite database')
-    parser.add_argument('--output', default='website/data/jobs.json', help='Output JSON file')
+    parser.add_argument('--output', default='a/data/jobs.json', help='Output JSON file')
     args = parser.parse_args()
     
     # Ensure the output directory exists
