@@ -13,6 +13,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 
+from update_categories import determine_category
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
@@ -131,7 +133,7 @@ class CVLVScraper:
             'url': url
         }
     
-    def get_job_details(self, url):
+    def get_job_details(self, title, url):
         """Scrape detailed information from a job listing page using Selenium"""
         try:
             logging.info(f"Loading job details from: {url}")
@@ -171,7 +173,9 @@ class CVLVScraper:
                 
                 # Get the full description text
                 details['description'] = description_panel.text.strip()
-                
+
+                details['job_category'] = determine_category(title, details['description'])
+            
                 # Try to extract specific sections if they exist
                 details.update(self._extract_job_sections(description_panel))
             

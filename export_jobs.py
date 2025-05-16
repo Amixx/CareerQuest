@@ -28,7 +28,7 @@ def export_jobs_to_json(db_path, output_file):
                    deadline, teamwork_preference, work_environment, learning_opportunity,
                    company_size, remote_preference, career_growth, project_type,
                    experience_required, stress_level, creativity_required,
-                   url, scraped_at
+                   job_category, url, scraped_at
             FROM job_listings
         """)
         

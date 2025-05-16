@@ -50,7 +50,7 @@ def main():
                 logging.info(f"Processing: {listing['title']}")
                 
                 # Get detailed information
-                details = scraper.get_job_details(listing['url'])
+                details = scraper.get_job_details(listing['title'], listing['url'])
                 
                 # Skip image-only listings
                 if details.get('is_image_only'):

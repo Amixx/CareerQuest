@@ -30,6 +30,7 @@ class JobListing(Base):
     experience_required = Column(Float)
     stress_level = Column(Float)
     creativity_required = Column(Float)
+    job_category = Column(String(100))
     url = Column(String(500), unique=True)
     scraped_at = Column(DateTime, default=datetime.datetime.now)
 
