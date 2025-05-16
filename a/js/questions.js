@@ -1,5 +1,75 @@
 const questions = [
   {
+    id: 0,
+    text: "Kādā nozarē jūs vēlatos strādāt?",
+    type: "multiple",
+    options: [
+      {
+        value: "Administrēšana, Asistēšana",
+        text: "Administrēšana, Asistēšana",
+      },
+      { value: "Apsardze, Drošība", text: "Apsardze, Drošība" },
+      {
+        value: "Bankas, Apdrošināšana, Finanses, Grāmatvedība",
+        text: "Bankas, Apdrošināšana, Finanses, Grāmatvedība",
+      },
+      {
+        value: "Būvniecība, Nekustamais īpašums, Ceļu būve",
+        text: "Būvniecība, Nekustamais īpašums, Ceļu būve",
+      },
+      {
+        value: "Elektronika, Telekomunikācijas, Enerģētika",
+        text: "Elektronika, Telekomunikācijas, Enerģētika",
+      },
+      {
+        value: "Informāciju tehnoloģijas, Datori",
+        text: "Informāciju tehnoloģijas, Datori",
+      },
+      { value: "Inženiertehnika", text: "Inženiertehnika" },
+      { value: "Izglītība, Zinātne", text: "Izglītība, Zinātne" },
+      { value: "Jurisprudence, Tieslietas", text: "Jurisprudence, Tieslietas" },
+      { value: "Kultūra, Māksla, Izklaide", text: "Kultūra, Māksla, Izklaide" },
+      {
+        value: "Lauksaimniecība, Mežsaimniecība, Vide",
+        text: "Lauksaimniecība, Mežsaimniecība, Vide",
+      },
+      { value: "Mājsaimniecība, Apkope", text: "Mājsaimniecība, Apkope" },
+      {
+        value: "Mārketings, Reklāma, PR, Mediji",
+        text: "Mārketings, Reklāma, PR, Mediji",
+      },
+      { value: "Pakalpojumi", text: "Pakalpojumi" },
+      {
+        value: "Pārdošana, Tirdzniecība, Klientu apkalpošana",
+        text: "Pārdošana, Tirdzniecība, Klientu apkalpošana",
+      },
+      { value: "Personāla vadība", text: "Personāla vadība" },
+      {
+        value: "Prakse, Brīvprātīgais darbs",
+        text: "Prakse, Brīvprātīgais darbs",
+      },
+      { value: "Ražošana, Rūpniecība", text: "Ražošana, Rūpniecība" },
+      {
+        value: "Transports, Loģistika, Piegāde",
+        text: "Transports, Loģistika, Piegāde",
+      },
+      {
+        value: "Tūrisms, Viesnīcas, Ēdināšana",
+        text: "Tūrisms, Viesnīcas, Ēdināšana",
+      },
+      { value: "Vadība", text: "Vadība" },
+      {
+        value: "Valsts un pašvaldību pārvalde",
+        text: "Valsts un pašvaldību pārvalde",
+      },
+      {
+        value: "Veselības aprūpe, Farmācija",
+        text: "Veselības aprūpe, Farmācija",
+      },
+    ],
+    field: "job_category",
+  },
+  {
     id: 1,
     text: "Vai jūs dodat priekšroku darbam komandā vai individuāli?",
     type: "scale",

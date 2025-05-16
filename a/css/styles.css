@@ -154,3 +154,9 @@ footer {
     flex-wrap: wrap;
   }
 }
+
+.match-category {
+  margin: 4px 0;
+  color: #555;
+  font-size: 0.9em;
+}

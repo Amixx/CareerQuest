@@ -102,7 +102,7 @@ function displayCurrentQuestion() {
         <div class="question-nav">
             ${
               currentQuestionIndex > 0
-                ? '<button class="btn btn-secondary" id="prev-btn">Previous</button>'
+                ? '<button class="btn btn-secondary" id="prev-btn">Iepriekšējais</button>'
                 : "<div></div>"
             }
             <button class="btn btn-primary" id="next-btn">
@@ -172,7 +172,13 @@ function saveCurrentAnswer() {
       `input[name="q${question.id}"]:checked`
     );
     if (selectedOption) {
-      answers[question.field] = parseInt(selectedOption.value);
+      // For job_category, store the string value
+      if (question.field === "job_category") {
+        answers[question.field] = selectedOption.value;
+      } else {
+        // For other numeric fields
+        answers[question.field] = parseInt(selectedOption.value);
+      }
     }
   }
 }
@@ -193,17 +199,33 @@ function calculateMatches() {
     project_type: 0.7,
   };
 
-  matchedJobs = jobs.map((job) => {
+  // First filter jobs by category
+  let filteredJobs = jobs;
+  if (answers.job_category) {
+    filteredJobs = jobs.filter(
+      (job) => job.job_category === answers.job_category
+    );
+
+    // If no jobs match the category, show a message
+    if (filteredJobs.length === 0) {
+      matchedJobs = [];
+      return;
+    }
+  }
+
+  matchedJobs = filteredJobs.map((job) => {
     let weightedScore = 0;
     let totalWeight = 0;
 
     for (const field in answers) {
+      // Skip job_category as we've already filtered by it
+      if (field === "job_category") continue;
+
       if (job[field] !== undefined) {
         // Calculate match percentage (0-100)
         // Lower difference means better match
         const userValue = answers[field];
         const jobValue = job[field];
-        const maxPossibleDifference = 10; // Scale is 0-10
 
         // Calculate how well they match (100% = perfect match, 0% = completely opposite)
         const difference = Math.abs(jobValue - userValue);
@@ -229,8 +251,7 @@ function calculateMatches() {
   // Sort jobs by match score (highest first)
   matchedJobs.sort((a, b) => b.matchScore - a.matchScore);
 
-  // Only keep the top matches (e.g., top 10)
-  matchedJobs = matchedJobs.slice(0, 10);
+  matchedJobs = matchedJobs.slice(0, 50);
 }
 
 // Show results screen with matched jobs
@@ -288,6 +309,7 @@ function showResults() {
             </div>
             <div class="match-company">${job.company}</div>
             <div class="match-location">${job.location}</div>
+            <div class="match-category">Kategorija: ${job.job_category}</div>
             ${
               salaryText
                 ? `<div class="match-salary">Alga: ${salaryText}</div>`
